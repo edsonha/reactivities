@@ -6,12 +6,14 @@ interface Props {
   activity: Activity | undefined;
   closeForm: () => void;
   createOrEdit: (activity: Activity) => void;
+  submitting: boolean
 }
 
 const ActivityForm: React.FC<Props> = ({
   activity: selectedActivity,
   closeForm,
-  createOrEdit
+  createOrEdit,
+  submitting
 }) => {
   const initialState = selectedActivity ?? {
     id: '',
@@ -77,7 +79,13 @@ const ActivityForm: React.FC<Props> = ({
           placeholder='Venue'
           value={activity.venue}
         />
-        <Button floated='right' positive type='submit' content='Submit' />
+        <Button 
+          floated='right' 
+          positive 
+          type='submit' 
+          content='Submit'
+          loading={submitting} 
+        />
         <Button
           onClick={closeForm}
           floated='right'

@@ -12,6 +12,7 @@ function App() {
   const [selectedActivity, setSelectedActivity] = useState<Activity | undefined>(undefined);
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     agent.Activities.list().then(response => {
@@ -43,12 +44,22 @@ function App() {
   }
 
   const handleCreateOrEditActivity = (activity: Activity) => {
+    setSubmitting(true);
     activity.id 
-    ? setActivities([...activities.filter(x=> x.id !== activity.id), activity])
-    : setActivities([...activities, {...activity, id: uuid()}]);
-    setEditMode(false);
-    setSelectedActivity(activity);
-  }
+    ? agent.Activities.update(activity).then(() => {
+       setActivities([...activities.filter(x=> x.id !== activity.id), activity])
+       setSelectedActivity(activity);
+       setEditMode(false);
+       setSubmitting(false);
+    })
+    : activity.id = uuid(); 
+      agent.Activities.create(activity).then(() => {
+      setActivities([...activities, activity]);
+      setSelectedActivity(activity);
+      setEditMode(false);
+      setSubmitting(false);
+    });
+  };
 
  const handleDeleteActivity = (id: string) => {
    setActivities([...activities.filter(x=> x.id !== id)])
@@ -69,6 +80,7 @@ function App() {
           closeForm={handleFormClose}
           createOrEdit={handleCreateOrEditActivity}
           deleteActivity={handleDeleteActivity}
+          submitting={submitting}
         />
       </Container>
     </>
