@@ -37,6 +37,7 @@ const ActivityDashboard: React.FC<Props>= ({
           activities={activities} 
           deleteActivity={deleteActivity}
           selectActivity={selectActivity}
+          submitting={submitting}
         />
       </Grid.Column>
       <Grid.Column width={6}>
